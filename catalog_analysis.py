@@ -204,6 +204,50 @@ print("ДРУГОЙ МЕТОД")
 print("")
 
 print(count_long_movies(movies=movies))
+print("")
+print("ДРУГОЙ МЕТОД")
+print("")
+
+
+
+
+#FOURTH STAGE
+
+def normalize_title(title):
+    words = title.split()
+    final_titles = []
+
+    for word in words:
+        first_letter = word[0].upper()
+        another_part_of_title = word[1:]
+        new_word = first_letter + another_part_of_title
+        final_titles.append(new_word)
+    return ' '.join(final_titles)
+
+
+def make_slug(title):
+    norm_title = normalize_title(title)
+    lower_title = norm_title.lower()
+    return lower_title.replace(" ", "-")
+
+
+def format_report_line(movie):
+    normalize_title_value = normalize_title(movie["title"])
+    duration = duration_in_hours(movie["duration_min"])
+    return f"'\"{normalize_title_value}\" ({movie["year"]}) - {movie["rating"]}/10, {duration[0]}ч {duration[1]}м, жанры: {', '.join(map(str, movie["genres"]))}'"
+
+print(normalize_title("test case"))
+print("")
+print("ДРУГОЙ МЕТОД")
+print("")
+
+print(make_slug("test case"))
+print("")
+print("ДРУГОЙ МЕТОД")
+print("")
+
+for movie in movies:
+    print(format_report_line(movie))
 
 
 if __name__ == "__main__":
