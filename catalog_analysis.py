@@ -28,6 +28,7 @@ movies = [
      "rating": 7.3, "duration_min": 129, "actors": ["P. Diaz", "T. Chalamet"]},
 ]
 
+#FIRST STAGE
 
 def average_rating(movies):
     """Вычисляет среднее значение рейтинга списка фильмов
@@ -36,14 +37,14 @@ def average_rating(movies):
     Returns:
         среднее значение рейтинга фильмов
     """
-    countRating = 0
-    finalRating = 0.0
+    count_rating = 0
+    final_rating = 0.0
 
     for movie in movies:
-        finalRating += movie["rating"]
-        countRating += 1
+        final_rating += movie["rating"]
+        count_rating += 1
 
-    return round(finalRating / countRating, 1)
+    return round(final_rating / count_rating, 1)
 
 def catalog_age_stats(movies, current_year=2026):
     """Определяет самый старый фильм, самый новый фильм и среднее значение года
@@ -55,18 +56,18 @@ def catalog_age_stats(movies, current_year=2026):
     """
     years = [movie["year"] for movie in movies]
 
-    movieAverage = 0
-    countMovie = 0
-    oldestMovie = min(years)
-    newestMovie = max(years) 
+    movie_average = 0
+    count_movie = 0
+    oldest_movie = min(years)
+    newest_movie = max(years) 
     
     
     for movie in movies:
-        movieAverage += movie["year"]
-        countMovie += 1
+        movie_average += current_year - movie["year"]
+        count_movie += 1
 
-    movieAverage = math.ceil(movieAverage / countMovie)
-    return (oldestMovie, newestMovie, movieAverage)
+    movie_average = math.ceil(movie_average / count_movie)
+    return (oldest_movie, newest_movie, movie_average)
 
 
 def duration_in_hours(minutes):
@@ -82,12 +83,127 @@ def duration_in_hours(minutes):
     return (hours, minute)
 
 
-#Отладочные методы
+#Отладочные методы 
+#TODO убрать перед сдачей работы на проверку
 print(average_rating(movies))
+print("")
+print("ДРУГОЙ МЕТОД")
+print("")
 print(catalog_age_stats(movies))
+print("")
+print("ДРУГОЙ МЕТОД")
+print("")
 for movie in movies:
     print(duration_in_hours(movie["duration_min"]))
+print("")
+print("ДРУГОЙ МЕТОД")
+print("")
 
+
+
+
+#SECOND STAGE
+
+def rating_tier(rating):
+    rating_value = ""
+    if rating < 5:
+        rating_value = "слабо"
+    elif 6.9 >= rating >= 5:
+        rating_value = "средне"
+    elif 8.9 >= rating >= 7:
+        rating_value = "хорошо"
+    elif rating >= 9:
+        rating_value = "шедевр"
+
+    return rating_value
+        
+
+def decade_label(year):
+    film_novelty_indicator = ""
+    match year:
+        case year if year > 2020:
+            film_novelty_indicator = "новые"
+        case year if 2015 <= year <= 2020:
+            film_novelty_indicator = "недавние"
+        case _:
+            film_novelty_indicator = "старые"
+
+    return film_novelty_indicator
+
+
+#Отладочные методы 
+#TODO убрать перед сдачей работы на проверку
+for movie in movies:
+    print(rating_tier(movie["rating"]))
+print("")
+print("ДРУГОЙ МЕТОД")
+print("")
+for movie in movies:
+    print(decade_label(movie["year"]))
+
+
+
+
+
+#THIRD STAGE
+
+def not_comedy_movies(movies):
+    not_comedy_movies_list = []
+    for movie in movies:
+        if "comedy" in movie["genres"]:
+            continue
+        not_comedy_movies_list.append(movie["title"])
+        
+
+    return not_comedy_movies_list
+
+
+def get_first_masterpiece_movie(movies):
+    result = ""
+    i = 0
+    while i < len(movies):
+        current_movie = movies[i]
+        if current_movie["rating"] > 9.0:
+            result = current_movie["title"]
+            break
+        i += 1
+    else:
+        result = "Шедевров не найдено"
+
+    return result
+
+def count_long_movies(movies, threshold=120):
+    movie_long_duration_count = 0
+    for movie in movies:
+        if movie["duration_min"] > threshold:
+            movie_long_duration_count += 1
+
+    return movie_long_duration_count
+    
+
+#Отладочные методы 
+#TODO убрать перед сдачей работы на проверку
+for movie_name in not_comedy_movies(movies):
+    print(movie_name)
+
+print("")
+print("ДРУГОЙ МЕТОД")
+print("")
+
+for movie_name in not_comedy_movies(movies):
+        print(movie_name)
+
+print("")
+print("ДРУГОЙ МЕТОД")
+print("")
+
+print(get_first_masterpiece_movie(movies=movies))
+
+print("")
+print("ДРУГОЙ МЕТОД")
+print("")
+
+print(count_long_movies(movies=movies))
 
 
 if __name__ == "__main__":
