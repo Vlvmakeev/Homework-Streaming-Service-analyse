@@ -1,4 +1,5 @@
 import math
+import json
 
 def main():
     print("Hello from homework-streaming-service-analyse!")
@@ -236,6 +237,9 @@ def format_report_line(movie):
     duration = duration_in_hours(movie["duration_min"])
     return f"'\"{normalize_title_value}\" ({movie["year"]}) - {movie["rating"]}/10, {duration[0]}ч {duration[1]}м, жанры: {', '.join(map(str, movie["genres"]))}'"
 
+
+#Отладочные методы 
+#TODO убрать перед сдачей работы на проверку
 print(normalize_title("test case"))
 print("")
 print("ДРУГОЙ МЕТОД")
@@ -248,6 +252,156 @@ print("")
 
 for movie in movies:
     print(format_report_line(movie))
+print("")
+print("ДРУГОЙ МЕТОД")
+print("")
+
+
+
+
+#FIFTH STAGE
+
+def titles_sorted_by_rating(movies):
+    sorted_movies = sorted(movies, key = lambda movie: movie["rating"], reverse=True)
+    return [movie["title"] for movie in sorted_movies]
+
+
+def top_n_by_rating(movies, n=3):
+    sorted_movies = sorted(movies, key = lambda movie: movie["rating"], reverse=True)
+    top_3_movies = sorted_movies[:n]
+    movies_tuples_list = []
+    for movie in top_3_movies:
+        #movie_tuple = f'("{movie["title"]}", {movie["rating"]})'
+        #edited_title = movie["title"].replace("'", '"')
+        movie_tuple = (movie["title"], movie["rating"])
+        movies_tuples_list.append(movie_tuple)
+
+    return json.dumps(movies_tuples_list)
+
+
+
+#Отладочные методы 
+#TODO убрать перед сдачей работы на проверку
+for movie in titles_sorted_by_rating(movies):
+    print(movie)
+print("")
+print("ДРУГОЙ МЕТОД")
+print("")
+print(top_n_by_rating(movies))
+
+print("")
+print("ДРУГОЙ МЕТОД")
+print("")
+
+
+
+#SIXTH STAGE
+
+def count_by_genre(movies):
+    dict_movies = {}
+    for movie in movies:
+        for genre in movie["genres"]:
+            dict_movies[genre] = dict_movies.get(genre, 0) + 1
+
+    return dict_movies
+        
+
+
+#Отладочные методы 
+#TODO убрать перед сдачей работы на проверку
+print(count_by_genre(movies))
+print("")
+print("ДРУГОЙ МЕТОД")
+print("")
+
+
+def actor_filmography(movies):
+    dict_actors = {}
+    for movie in movies:
+        for actor in movie["actors"]:
+            if dict_actors.get(actor, 0) == 0:
+                dict_actors[actor] = []
+            dict_actors[actor].append(movie["title"])
+
+    return dict_actors
+
+
+#Отладочные методы 
+#TODO убрать перед сдачей работы на проверку
+print(actor_filmography(movies))
+print("")
+print("ДРУГОЙ МЕТОД")
+print("")
+
+
+def title_rating_pairs_upper_middle(movies):
+    avg_rating = average_rating(movies)
+    result = {movie_top["title"]: movie_top["rating"] for movie_top in movies if movie_top["rating"] > avg_rating}
+    return result
+
+
+#Отладочные методы 
+#TODO убрать перед сдачей работы на проверку
+print(title_rating_pairs_upper_middle(movies))
+print("")
+print("ДРУГОЙ МЕТОД")
+print("")
+
+
+# SEVENTH STAGE
+
+
+def all_genres(movies):
+    set_genres = set()
+    for movie in movies:  
+        set_genres = set_genres | movie["genres"]
+    return set_genres
+
+
+#Отладочные методы 
+#TODO убрать перед сдачей работы на проверку
+print(all_genres(movies))
+print("")
+print("ДРУГОЙ МЕТОД")
+print("")
+
+
+#TODO что делать с двойными кавычками, как в задании?
+def common_actors(movie1, movie2):
+    return set(movie1["actors"]) & set(movie2["actors"])
+
+print(common_actors(movies[0], movies[3]))
+print("")
+print("ДРУГОЙ МЕТОД")
+print("")
+
+
+def genres_only_in_one(movies_a, movies_b):
+    set_genres_movies_a = set()
+    set_genres_movies_b = set()
+    for movie_a in movies_a:
+        set_genres_movies_a.update(movie_a["genres"])
+    for movie_b in movies_b:
+        set_genres_movies_b.update(movie_b["genres"])
+    return set_genres_movies_a - set_genres_movies_b
+
+
+print(genres_only_in_one(movies[5:6], movies[:5]))
+print("")
+print("ДРУГОЙ МЕТОД")
+print("")
+
+
+
+
+#EIGHTH STAGE
+
+def iter_high_rated(movies, min_rating=8.0):
+    for movie in movies:
+        yield movie if movie["rating"] >= min_rating else None
+        print(format_report_line(movie))
+
+
 
 
 if __name__ == "__main__":
