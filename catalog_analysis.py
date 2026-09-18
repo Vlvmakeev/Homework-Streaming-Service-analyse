@@ -29,6 +29,7 @@ movies = [
      "rating": 7.3, "duration_min": 129, "actors": ["P. Diaz", "T. Chalamet"]},
 ]
 
+
 #FIRST STAGE
 
 def average_rating(movies):
@@ -84,25 +85,6 @@ def duration_in_hours(minutes):
     return (hours, minute)
 
 
-#Отладочные методы 
-#TODO убрать перед сдачей работы на проверку
-print(average_rating(movies))
-print("")
-print("ДРУГОЙ МЕТОД")
-print("")
-print(catalog_age_stats(movies))
-print("")
-print("ДРУГОЙ МЕТОД")
-print("")
-for movie in movies:
-    print(duration_in_hours(movie["duration_min"]))
-print("")
-print("ДРУГОЙ МЕТОД")
-print("")
-
-
-
-
 #SECOND STAGE
 
 def rating_tier(rating):
@@ -130,20 +112,6 @@ def decade_label(year):
             film_novelty_indicator = "старые"
 
     return film_novelty_indicator
-
-
-#Отладочные методы 
-#TODO убрать перед сдачей работы на проверку
-for movie in movies:
-    print(rating_tier(movie["rating"]))
-print("")
-print("ДРУГОЙ МЕТОД")
-print("")
-for movie in movies:
-    print(decade_label(movie["year"]))
-
-
-
 
 
 #THIRD STAGE
@@ -180,36 +148,6 @@ def count_long_movies(movies, threshold=120):
             movie_long_duration_count += 1
 
     return movie_long_duration_count
-    
-
-#Отладочные методы 
-#TODO убрать перед сдачей работы на проверку
-for movie_name in not_comedy_movies(movies):
-    print(movie_name)
-
-print("")
-print("ДРУГОЙ МЕТОД")
-print("")
-
-for movie_name in not_comedy_movies(movies):
-        print(movie_name)
-
-print("")
-print("ДРУГОЙ МЕТОД")
-print("")
-
-print(get_first_masterpiece_movie(movies=movies))
-
-print("")
-print("ДРУГОЙ МЕТОД")
-print("")
-
-print(count_long_movies(movies=movies))
-print("")
-print("ДРУГОЙ МЕТОД")
-print("")
-
-
 
 
 #FOURTH STAGE
@@ -238,26 +176,6 @@ def format_report_line(movie):
     return f"'\"{normalize_title_value}\" ({movie["year"]}) - {movie["rating"]}/10, {duration[0]}ч {duration[1]}м, жанры: {', '.join(map(str, movie["genres"]))}'"
 
 
-#Отладочные методы 
-#TODO убрать перед сдачей работы на проверку
-print(normalize_title("test case"))
-print("")
-print("ДРУГОЙ МЕТОД")
-print("")
-
-print(make_slug("test case"))
-print("")
-print("ДРУГОЙ МЕТОД")
-print("")
-
-for movie in movies:
-    print(format_report_line(movie))
-print("")
-print("ДРУГОЙ МЕТОД")
-print("")
-
-
-
 
 #FIFTH STAGE
 
@@ -271,28 +189,10 @@ def top_n_by_rating(movies, n=3):
     top_3_movies = sorted_movies[:n]
     movies_tuples_list = []
     for movie in top_3_movies:
-        #movie_tuple = f'("{movie["title"]}", {movie["rating"]})'
-        #edited_title = movie["title"].replace("'", '"')
         movie_tuple = (movie["title"], movie["rating"])
         movies_tuples_list.append(movie_tuple)
 
     return json.dumps(movies_tuples_list)
-
-
-
-#Отладочные методы 
-#TODO убрать перед сдачей работы на проверку
-for movie in titles_sorted_by_rating(movies):
-    print(movie)
-print("")
-print("ДРУГОЙ МЕТОД")
-print("")
-print(top_n_by_rating(movies))
-
-print("")
-print("ДРУГОЙ МЕТОД")
-print("")
-
 
 
 #SIXTH STAGE
@@ -303,17 +203,8 @@ def count_by_genre(movies):
         for genre in movie["genres"]:
             dict_movies[genre] = dict_movies.get(genre, 0) + 1
 
-    return dict_movies
+    return sorted(dict_movies.items(), key=lambda item: item[1], reverse=True)
         
-
-
-#Отладочные методы 
-#TODO убрать перед сдачей работы на проверку
-print(count_by_genre(movies))
-print("")
-print("ДРУГОЙ МЕТОД")
-print("")
-
 
 def actor_filmography(movies):
     dict_actors = {}
@@ -326,26 +217,11 @@ def actor_filmography(movies):
     return dict_actors
 
 
-#Отладочные методы 
-#TODO убрать перед сдачей работы на проверку
-print(actor_filmography(movies))
-print("")
-print("ДРУГОЙ МЕТОД")
-print("")
-
-
 def title_rating_pairs_upper_middle(movies):
     avg_rating = average_rating(movies)
     result = {movie_top["title"]: movie_top["rating"] for movie_top in movies if movie_top["rating"] > avg_rating}
     return result
 
-
-#Отладочные методы 
-#TODO убрать перед сдачей работы на проверку
-print(title_rating_pairs_upper_middle(movies))
-print("")
-print("ДРУГОЙ МЕТОД")
-print("")
 
 
 # SEVENTH STAGE
@@ -358,22 +234,10 @@ def all_genres(movies):
     return set_genres
 
 
-#Отладочные методы 
-#TODO убрать перед сдачей работы на проверку
-print(all_genres(movies))
-print("")
-print("ДРУГОЙ МЕТОД")
-print("")
-
 
 #TODO что делать с двойными кавычками, как в задании?
 def common_actors(movie1, movie2):
     return set(movie1["actors"]) & set(movie2["actors"])
-
-print(common_actors(movies[0], movies[3]))
-print("")
-print("ДРУГОЙ МЕТОД")
-print("")
 
 
 def genres_only_in_one(movies_a, movies_b):
@@ -386,21 +250,35 @@ def genres_only_in_one(movies_a, movies_b):
     return set_genres_movies_a - set_genres_movies_b
 
 
-print(genres_only_in_one(movies[5:6], movies[:5]))
-print("")
-print("ДРУГОЙ МЕТОД")
-print("")
-
-
-
 
 #EIGHTH STAGE
 
 def iter_high_rated(movies, min_rating=8.0):
     for movie in movies:
-        yield movie if movie["rating"] >= min_rating else None
-        print(format_report_line(movie))
+        if movie["rating"] >= min_rating:
+            yield movie
 
+for movie in iter_high_rated(movies):
+    print(format_report_line(movie))
+
+
+sum(movie["duration_min"] for movie in movies if movie["rating"] > 7)
+
+
+def build_report(movies):
+    print("ОТЧЕТ ПО КАТАЛОГУ")
+    print(f"Средний рейтинг: {average_rating(movies)}")
+    print(f"Средний возраст фильмов: {catalog_age_stats(movies)[2]} лет")
+    print("\n")
+    print(f"Топ-3 фильма:\n{top_n_by_rating(movies)}")
+    print("\n")
+    print("Фильмов по жанрам:")
+    for genre, count in count_by_genre(movies):
+        print(f"{genre} - {count}")
+    print("\n")
+    print(f"Все жанры каталога: {', '.join(sorted(all_genres(movies)))}")
+
+build_report(movies)
 
 
 
